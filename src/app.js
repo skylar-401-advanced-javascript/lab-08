@@ -46,7 +46,7 @@ app.use(errorHandler);
 // ROUTE HANDLER FUNCTIONS
 function getCategories(request,response,next) {
   // expects an array of object to be returned from the model
-  categories.get()
+  categories.getAll()
     .then( data => {
       const output = {
         count: data.length,
@@ -66,8 +66,9 @@ function getCategory(request,response,next) {
 
 function postCategories(request,response,next) {
   // expects the record that was just added to the database
+  console.log(request.body);
   categories.post(request.body)
-    .then( result => response.status(200).json(result[0]) )
+    .then( result => response.status(200).send(result[0]) )
     .catch( next );
 }
 

@@ -2,32 +2,37 @@
 
 const Products = require('./products-schema');
 
-const uuid = require('uuid/v4');
-
-const schema = {
-};
-
 class ProductsRepository {
-
-  constructor() {
-    this.database = [];
+  getAll() {
+    return Products.find();
   }
 
-  get(id) {
+  get(_id) {
+    if (!/^[0-9a-z]{24}$/i.test(_id)) {
+      return Products.resolve(null);
+    } else {
+      return Products.findOne({
+        _id: _id,
+      });
+    }
   }
   
-  post(entry) {
+  post(record) {
+    let mongoCategory = new Products (record);
+    return mongoCategory.save();
   }
 
-  put(id, entry) {
+  put(_id, record) {
+    Products.findByIdAndUpdate(_id, record, (err, category) => {
+      return category;
+    });
   }
-
-  delete(id) {
+  
+  async delete(_id) {
+    Products.findByIdAndDelete(_id, (err, category) => {
+      return category;
+    });
   }
-
-  sanitize(entry) {
-  }
-
 }
 
 module.exports = ProductsRepository;
